@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja-jp">
+
+<head>
+  <title>Bitcoin ECサイト</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- Load JavaScript library. -->
+  <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+    crossorigin="anonymous"></script>
+  <script src="../public/javascripts/bitcoinjs_4.0.2.js"></script>
+  <script src="../public/javascripts/bip39_2.5.0.js"></script>
+  <script src="../public/javascripts/bitcoin.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">商品</a></li>
+        <li><a href="/about">詳細</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="jumbotron text-center">
+    <h1>bitcoin ECサイト</h1>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3>りんご</h3>
+          </div>
+          <div class="panel-body text-center">
+            <img src="https://www.aomori-ringo.or.jp/wp-content/uploads/2018/06/wasefuji.png" alt="りんご" width="250" height="250">
+          </div>
+          <div class="panel-footer">
+            <a href="#" class="btn btn-info">
+              購入
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3>ばなな</h3>
+          </div>
+          <div class="panel-body text-center">
+            <img src="https://takuhai.daichi-m.co.jp/image/goods/02816247_l1.jpg" alt="ばなな" width="250" height="250">
+          </div>
+          <div class="panel-footer">
+            <a href="#" class="btn btn-info">
+              購入
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3>めろん</h3>
+          </div>
+          <div class="panel-body text-center">
+            <img src="https://images-na.ssl-images-amazon.com/images/I/71HxDTSwPDL._SX425_.jpg" alt="めろん" width="259" height="250">
+          </div>
+          <div class="panel-footer">
+            <a href="#" class="btn btn-info">
+              購入
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+  
+    <div class="row">
+      <h2>Step 0 - 拡張鍵ペアの生成</h2>
+      <div class="text-center">
+        <button class="btn btn-primary" onclick="generateKeys();">拡張鍵ペアの生成</button>
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">ニーモニック 1</span>
+        <input type="text" class="form-control" id="mnemonic1" placeholder="devote victory matrix whale impact edge story rain morning remain skull strike"
+          disabled="disabled">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">拡張公開鍵 1</span>
+        <input type="text" class="form-control" id="extpubkey1" placeholder="tpubD6NzVbkrYhZ4Y3eYE9P23eLeNbkaKgVTv88Wu47GWqLs7XuDPwCcJSkZtJnWtd6y1WXXrEZHrzdLPNYKSvdxnWmXtDB8bDinobZpdTrdh2R"
+          disabled="disabled">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">ニーモニック 2</span>
+        <input type="text" class="form-control" id="mnemonic2" placeholder="medal rebel arm bacon wheel video frequent cigar decade involve bargain release"
+          disabled="disabled">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">拡張公開鍵 2</span>
+        <input type="text" class="form-control" id="extpubkey2" placeholder="tpubD6NzVbkrYhZ4XPBc12DG2qTdM7pTEbQkCCZJ8fq564hnu8ZrQm7UUHDwxsE2xf9WLU8UcDqCumrMJsjn4nUEbGDD9wrviJ23sDspSrraPrV"
+          disabled="disabled">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">ニーモニック 3</span>
+        <input type="text" class="form-control" id="mnemonic3" placeholder="supreme cherry couch hint winter pizza crane mixed measure chronic divide tomato"
+          disabled="disabled">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">拡張公開鍵 3</span>
+        <input type="text" class="form-control" id="extpubkey3" placeholder="tpubD6NzVbkrYhZ4Wpp7CzLYUPzRsorRFz1fsTgiYkU2MqxZEPrgST81aF7xx2k2f8TruKikzrZenY3PJpu2GFGkcZPTSyC72LbvzQvkiATuqgN"
+          disabled="disabled">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const generateKeys = (useLocalStorage) => {
+      for(let i=1; i<=3; i++) {
+        const mnemonic = (useLocalStorage ? localStorage.getItem('mnemonic'+i) : null) || bip39.generateMnemonic();
+        const seed = bip39.mnemonicToSeed(mnemonic);
+        const xprv = bitcoin.bip32.fromSeed(seed, bitcoin.networks.testnet);
+        localStorage.setItem('mnemonic'+i, mnemonic);
+        $('#mnemonic'+i).val(mnemonic);
+        if(i<3) $('#sign-mnemonic'+i).val(mnemonic);
+        $('#extpubkey'+i).val(xprv.neutered().toBase58());
+      }
+    };
+  </script>
+</body>
+
+</html>
